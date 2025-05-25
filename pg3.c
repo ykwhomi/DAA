@@ -54,14 +54,14 @@ int main() {
         return 1;
     }
 
-    srand(1);  // Moved outside the loop to prevent same numbers each time
+    srand(1);  
 
     for (k = 1; k <= NTIMES; k++) {
         for (i = 1; i <= n; i++)
             a[i] = rand();
 
         start = clock();
-        merge_sort_custom(a, 1, n);  // Use 1-based indexing as in original
+        merge_sort_custom(a, 1, n); 
         end = clock();
 
         runtime += ((double)(end - start)) / CLOCKS_PER_SEC;
