@@ -1,5 +1,5 @@
 // Floyd's Algorithm
-
+#include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 int min(int a, int b)
@@ -36,6 +36,7 @@ int main()
     }
 }
 
+//warshall's 
 #include<stdio.h> 
 void warshal(int cost[10][10], int n)
 {

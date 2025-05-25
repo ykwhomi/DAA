@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include<stdlib.h>
 int x[10];
 void nqueens(int, int);
 void main()
