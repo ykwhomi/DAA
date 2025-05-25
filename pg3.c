@@ -1,76 +1,79 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
+
 #define MAXSIZE 30000
 #define NTIMES 5000
-void merge(int a[], int low, int mid, int high)
-{
-    int i, j, k, p;
+
+void merge(int a[], int low, int mid, int high) {
+    int i, j, k;
     int b[MAXSIZE];
+
     i = low;
     j = mid + 1;
     k = low;
-    while (i <= mid && j <= high)
-    {
-        if (a[i] <= a[j])
-        {
-            b[k] = a[i];
-            i = i + 1;
+
+    while (i <= mid && j <= high) {
+        if (a[i] <= a[j]) {
+            b[k++] = a[i++];
+        } else {
+            b[k++] = a[j++];
         }
-        else
-        {
-            b[k] = a[j];
-            j = j + 1;
-        }
-        k = k + 1;
     }
+
     while (i <= mid)
-    {
-        b[k] = a[i];
-        i = i + 1;
-        k = k + 1;
-    }
+        b[k++] = a[i++];
+    
     while (j <= high)
-    {
-        b[k] = a[j];
-        j = j + 1;
-        k = k + 1;
-        for (i = low; i <= high; i++)
-            a[i] = b[i];
-    }
-    {
-    }
+        b[k++] = a[j++];
+
+    for (i = low; i <= high; i++)
+        a[i] = b[i];
 }
-void mergesort(int a[], int low, int high)
-{
+
+void merge_sort_custom(int a[], int low, int high) {
     int mid;
-    if (low < high)
-    {
+    if (low < high) {
         mid = (low + high) / 2;
-        mergesort(a, low, mid);
-        mergesort(a, mid + 1, high);
+        merge_sort_custom(a, low, mid);
+        merge_sort_custom(a, mid + 1, high);
         merge(a, low, mid, high);
     }
 }
-int main()
-{
-    int a[MAXSIZE], j, i, n, k;
+
+int main() {
+    int a[MAXSIZE], i, n, k;
     double runtime = 0;
     clock_t start, end;
-    printf("Enter the value of n\n");
+
+    printf("Enter the value of n (<= %d):\n", MAXSIZE - 1);
     scanf("%d", &n);
-    for (k = 1; k <= NTIMES; k++)
-    {
-        srand(1);
+
+    if (n >= MAXSIZE) {
+        printf("Value too large!\n");
+        return 1;
+    }
+
+    srand(1);  // Moved outside the loop to prevent same numbers each time
+
+    for (k = 1; k <= NTIMES; k++) {
         for (i = 1; i <= n; i++)
             a[i] = rand();
+
         start = clock();
-        mergesort(a, 1, n);
+        merge_sort_custom(a, 1, n);  // Use 1-based indexing as in original
         end = clock();
-        runtime = runtime + ((end - start) / CLOCKS_PER_SEC);
+
+        runtime += ((double)(end - start)) / CLOCKS_PER_SEC;
     }
-    runtime = runtime / NTIMES;
-    printf("\nSorted elements are\n");
+
+    runtime /= NTIMES;
+
+    printf("\nSorted elements are:\n");
     for (i = 1; i <= n; i++)
         printf("%d\n", a[i]);
-    printf("Time taken for sorting is %lf seconds", runtime);
+
+    printf("Average time taken for sorting: %lf seconds\n", runtime);
+
+    return 0;
 }
